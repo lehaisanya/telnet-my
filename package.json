@@ -1,0 +1,22 @@
+{
+  "name": "telnet-my",
+  "version": "2.0.0",
+  "description": "My client for telnet",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lehaisanya/telnet-my.git"
+  },
+  "keywords": [
+    "js",
+    "telnet"
+  ],
+  "author": "lehaisanya <lehaisanya@gmial.com>",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.3.3"
+  }
+}

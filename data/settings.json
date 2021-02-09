@@ -1,0 +1,7 @@
+{
+    "logs": false,
+    "defaultUser": "local",
+    "defaultOltUser": "tacacs:olt",
+    "defaultSwitchUser": "tacacs:olt",
+    "saveLast": 10
+}

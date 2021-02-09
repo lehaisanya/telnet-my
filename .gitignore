@@ -1,0 +1,7 @@
+node_modules/
+log/
+dump/
+temp/
+package-lock.json
+last.json
+*.hp
