@@ -1,3 +1,3 @@
 export enum TokenType {
-    Text
+    TEXT
 }

@@ -2,16 +2,15 @@
   "name": "telnet-my",
   "version": "2.0.0",
   "description": "My client for telnet",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node index.js"
+    "start": "ts-node-dev --respawn index.ts"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/lehaisanya/telnet-my.git"
   },
   "keywords": [
-    "js",
     "telnet"
   ],
   "author": "lehaisanya <lehaisanya@gmial.com>",
@@ -21,7 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^14.14.37",
-    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.3"
   }
 }

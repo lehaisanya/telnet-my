@@ -1,6 +1,8 @@
 import { TokenType } from "./TokenType";
 
-export interface Token {
-    type: TokenType
-    value: string
+export class Token {
+    constructor(
+        public readonly type: TokenType,
+        public readonly value: string
+    ) {}
 }
