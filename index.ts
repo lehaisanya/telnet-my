@@ -1,6 +1,6 @@
 import { Telnet } from "./modules/telnet/Telnet";
 
-const telnet = new Telnet('localhost', 8081)
+const telnet = new Telnet('192.168.1.1', 23)
 
 telnet.onMessage(msg => console.log(msg))
 

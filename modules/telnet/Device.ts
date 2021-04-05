@@ -1,5 +1,5 @@
-import { Token } from "./Token";
+import { Message } from "./Message";
 
 export interface Device {
-    parse(data: string): Token[]
+    parse(data: string): Message[]
 }

@@ -5,8 +5,8 @@ import { Telnet } from "../Telnet";
 import { Token } from "../Token";
 import { TokenType } from "../TokenType";
 
-export class Connecting implements State {
-    public readonly displayName = 'Connecting'
+export class Closed implements State {
+    public readonly displayName = 'Closed'
     private telnet: Telnet
 
     constructor(telnet: Telnet) {

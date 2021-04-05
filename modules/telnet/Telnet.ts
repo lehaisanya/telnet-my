@@ -1,10 +1,10 @@
 import { Socket, createConnection } from "net";
 import { State } from "./State";
 import { Message } from "./Message";
-import { Token } from "./Token";
 import { Device } from "./Device";
 import { Connecting } from "./states/Connecting";
-import { UniversalDevice } from "./devices/Universal";
+import { Closed } from "./states/Closed";
+import { TextDevice } from "./devices/Text";
 
 type MessageListener = (message: Message) => void;
 
@@ -19,19 +19,26 @@ export class Telnet {
   constructor(host: string, port: number) {
     this.host = host
     this.port = port
-    this.connect();
+    this.connect()
   }
 
-  public write(data: string) {
-    this.processInput(data);
+  public connect() {
+    this.state = new Connecting(this)
+    this.device = new TextDevice()
+    this.socket = createConnection(this.port, this.host)
+    this.configSoket()
+  }
+
+  public reconnect() {
+    this.socket.end(() => this.connect());
   }
 
   public close() {
     this.socket.end();
   }
 
-  public reconnect() {
-    this.socket.end(() => this.connect());
+  public write(data: string) {
+    this.processInput(data);
   }
 
   public onMessage(listener: MessageListener) {
@@ -42,41 +49,47 @@ export class Telnet {
     this.onData(data)
   }
 
-  private onData(newData: string) {
-    const tokens = this.parseData(newData);
-    const messages = this.processOutput(tokens);
-    messages.forEach((message) => {
-      this.listeners.forEach((listener) => {
-        listener(message);
-      });
-    });
+  public setState(state: State) {
+    this.state = state
   }
 
-  private parseData(data: string): Token[] {
+  private emitListeners(messages: Message[]) {
+    messages.forEach((message) => 
+      this.listeners.forEach(listener =>
+        listener(message)))
+  }
+
+  private parseData(data: string): Message[] {
     return this.device.parse(data);
   }
 
-  private processOutput(tokens: Token[]): Message[] {
-    return this.state.read(tokens);
+  private processOutput(messages: Message[]): void {
+    messages.forEach(message => {
+      this.state = this.state.read(message)
+    })
   }
 
   private processInput(data: string) {
     return this.state.write(data);
   }
 
-  private connect() {
-    this.state = new Connecting(this)
-    this.device = new UniversalDevice()
-    this.socket = createConnection(this.port, this.host)
-    this.configSoket()
-  }
-
   private configSoket() {
     this.emulateData('Connection open')
     this.socket.setEncoding("utf-8");
     this.socket.on("data", (data: string) => this.onData(data));
-    this.socket.on("close", (hasError: boolean) => this.emulateData('Connection close'));
+    this.socket.on("close", (hasError: boolean) => this.onClose(hasError));
     this.socket.on("error", (error: Error) => this.emulateData('Connection error'));
     this.socket.on("timeout", () => this.emulateData('Connection timeout'));
+  }
+
+  private onData(newData: string) {
+    const messages = this.parseData(newData);
+    this.processOutput(messages);
+    this.emitListeners(messages)
+  }
+
+  private onClose(hasError: boolean) {
+    this.emulateData('Connection close')
+    this.setState(new Closed(this))
   }
 }

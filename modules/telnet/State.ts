@@ -4,6 +4,6 @@ import { Token } from "./Token";
 
 export interface State {
     displayName: string
-    read(tokens: Token[]): Message[]
+    read(message: Message): State
     write(data: string): void
 }
